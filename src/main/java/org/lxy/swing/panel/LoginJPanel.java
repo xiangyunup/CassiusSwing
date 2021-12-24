@@ -34,13 +34,12 @@ public class LoginJPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            CassiusSwing ex = new CassiusSwing();
-            HomeJPanel homeJPanel = new HomeJPanel();
-            LoginJPanel loginJPanel = new LoginJPanel();
+            SwingUtil.cassiusSwing = new CassiusSwing();
             // 加载登录面板
-            ex.add(homeJPanel.getJPanel(loginJPanel.getJPanel()));
+            SwingUtil.cassiusSwing.add(new HomeJPanel()
+                    .getJPanel(new LoginJPanel().getJPanel()));
             // 设置窗体可见
-            ex.setVisible(true);
+            SwingUtil.cassiusSwing.setVisible(true);
         });
     }
 
