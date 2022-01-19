@@ -10,9 +10,12 @@ import org.lxy.swing.util.PropertiesUtil;
 public enum LanguageEnum {
     HOME("首页","home"),
     LOGIN_OK("登录","login"),
+    GEN("代码生成","gen"),
 
-    LOGIN_USER("账户:","userName:"),
-    LOGIN_PASS_WORD("密码:","passWord:"),
+    USER_NAME("账户:","userName:"),
+    PASS_WORD("密码:","passWord:"),
+    URL("地址:","url:"),
+    TABLE("表名:","table:"),
 
     NIU_NIU("牛牛","niuniu"),
     NUMBER_OF_GAMES("游戏人数:","Number of games:"),

@@ -1,5 +1,6 @@
 package org.lxy.swing.util;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.lxy.CassiusSwing;
 import org.lxy.swing.panel.HomeJPanel;
 
@@ -54,4 +55,13 @@ public class SwingUtil {
         JOptionPane.showMessageDialog(null,msg,"警告 ", JOptionPane.WARNING_MESSAGE);
     }
 
+    public static void checkNull(String param){
+        checkNull(param,"内容不能为空");
+    }
+
+    public static void checkNull(String param, String msg){
+        if(StringUtils.isBlank(param)){
+            throw new RuntimeException(msg);
+        }
+    }
 }

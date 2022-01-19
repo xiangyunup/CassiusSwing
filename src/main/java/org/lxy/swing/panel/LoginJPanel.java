@@ -3,6 +3,7 @@ package org.lxy.swing.panel;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import org.lxy.CassiusSwing;
+import org.lxy.swing.config.SpringContext;
 import org.lxy.swing.constant.LanguageEnum;
 import org.lxy.swing.constant.SwingConstant;
 import org.lxy.swing.panel.niuniu.NiuNiuJPanel;
@@ -43,6 +44,19 @@ public class LoginJPanel {
         });
     }
 
+    public static Action getReturnAction(JPanel panel){
+        return new TextAction(LanguageEnum.RETURN.getMsg()) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(PropertiesUtil.eqValue("dev","spring.profiles.active")){
+                    SwingUtil.switchJpanel(panel,new LoginJPanel().getJPanel());
+                } else {
+                    SwingUtil.switchJpanel(panel, SpringContext.getBean(LoginJPanel.class).getJPanel());
+                }
+            }
+        };
+    }
+
     public JPanel getJPanel(){
         JPanel panel = new JPanel();
         panel.setName(LanguageEnum.LOGIN_OK.getMsg());
@@ -53,7 +67,7 @@ public class LoginJPanel {
             panel.setBounds((int)(HomeJPanel.homeJPanel.getWidth() * 0.35),(int)(HomeJPanel.homeJPanel.getHeight() * 0.4),300,200);
         }
         // 创建 JLabel
-        JLabel userLabel = new JLabel(LanguageEnum.LOGIN_USER.getMsg());
+        JLabel userLabel = new JLabel(LanguageEnum.USER_NAME.getMsg());
         /* 这个方法定义了组件的位置。
          * setBounds(x, y, width, height)
          * x 和 y 指定左上角的新位置，由 width 和 height 指定新的大小。
@@ -70,7 +84,7 @@ public class LoginJPanel {
         panel.add(userText);
 
         // 输入密码的文本域
-        JLabel passwordLabel = new JLabel(LanguageEnum.LOGIN_PASS_WORD.getMsg());
+        JLabel passwordLabel = new JLabel(LanguageEnum.PASS_WORD.getMsg());
         passwordLabel.setBounds(10,50,BUTTON_WEDTH, BUTTON_HEIGHT);
         panel.add(passwordLabel);
 

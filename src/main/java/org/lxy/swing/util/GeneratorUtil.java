@@ -8,8 +8,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.GeneratorBuilder;
-import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
-import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
@@ -30,19 +28,45 @@ public class GeneratorUtil {
 
     public static void main(String[] args) throws Exception {
         GeneratorReq generatorReq = new GeneratorReq();
-        generatorReq.setDbUrl(PropertiesUtil.getValue("spring.datasource.url"));
-        generatorReq.setUserName(PropertiesUtil.getValue("spring.datasource.username"));
-        generatorReq.setPassword(PropertiesUtil.getValue("spring.datasource.password"));
         // 公共model存放目录
         generatorReq.setServerPath(File.separator);
-        // 业务名称： swing
-        String bizName = "swing";
-        // 包路径
-        String packageName = "org.lxy." + bizName + ".server";
-        generatorReq.setPackageName(packageName);
-        // 表名
-        String[] tables = {"nn_user"};
-        generatorReq.setTableNames(tables);
+        if(args.length > 0){
+            if(args.length < 4){
+                throw new RuntimeException("缺少配置参数");
+            }
+            SwingUtil.checkNull(args[0],"Url不能为空");
+            SwingUtil.checkNull(args[1],"账户不能为空");
+            SwingUtil.checkNull(args[2],"账户不能为空");
+            generatorReq.setDbUrl(args[0]);
+            generatorReq.setUserName(args[1]);
+            generatorReq.setPassword(args[2]);
+            // 业务名称： swing
+            String bizName = "swing";
+            if(args.length == 5){
+                bizName = args[3];
+                SwingUtil.checkNull(args[4],"表名不能为空");
+                generatorReq.setTableNames(args[4].split(","));
+            } else {
+                SwingUtil.checkNull(args[3],"表名不能为空");
+                generatorReq.setTableNames(args[3].split(","));
+            }
+            // 包路径
+            String packageName = "org.lxy." + bizName + ".server";
+            generatorReq.setPackageName(packageName);
+        } else {
+            generatorReq.setDbUrl(PropertiesUtil.getValue("spring.datasource.url"));
+            generatorReq.setUserName(PropertiesUtil.getValue("spring.datasource.username"));
+            generatorReq.setPassword(PropertiesUtil.getValue("spring.datasource.password"));
+            // 业务名称： swing
+            String bizName = "swing";
+            // 包路径
+            String packageName = "org.lxy." + bizName + ".server";
+            generatorReq.setPackageName(packageName);
+            // 表名
+            String[] tables = {"nn_user"};
+            generatorReq.setTableNames(tables);
+        }
+        System.out.println(JSON.toJSONString(args));
         System.out.println(JSON.toJSONString(generatorReq));
         generateByTables(generatorReq);
 //        generateByParam("");
@@ -83,12 +107,8 @@ public class GeneratorUtil {
                         generatorReq.getDbUrl(),
                         generatorReq.getUserName(),
                         generatorReq.getPassword())
-                // 类型转换,数据库=》JAVA类型
-                .typeConvert(new MySqlTypeConvert())
                 // 关键字处理 ,这里选取了mysql5.7文档中的关键字和保留字（含移除）
                 .keyWordsHandler(new MySqlKeyWordsHandler())
-                // 数据库信息查询类,默认由 dbType 类型决定选择对应数据库内置实现
-                .dbQuery(new MySqlQuery())
                 // 数据库 schema name
                 .schema(generatorReq.getSchemaName()).build();
         StrategyConfig strategyConfig = GeneratorBuilder.strategyConfigBuilder()

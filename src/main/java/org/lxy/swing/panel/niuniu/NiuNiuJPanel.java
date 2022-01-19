@@ -33,13 +33,13 @@ import static org.lxy.swing.constant.SwingConstant.*;
 @Component
 public class NiuNiuJPanel {
     // 显示字牌宽高
-    private static final int PAI_WIDTH = 60;
-    private static final int PAI_HEIGHT = 50;
+    public static final int PAI_WIDTH = 60;
+    public static final int PAI_HEIGHT = 50;
     // 下方按钮下沉比例
-    private static final double SINK_SCALE_W = 0.35;
-    private static final double SINK_SCALE_Y = 0.86;
+    public static final double SINK_SCALE_W = 0.35;
+    public static final double SINK_SCALE_Y = 0.86;
     // 人员间距比例
-    private static final double SPACING_SCALE = 0.08;
+    public static final double SPACING_SCALE = 0.08;
 
     public JPanel getJPanel() {
         JPanel panel = new JPanel();
@@ -169,23 +169,12 @@ public class NiuNiuJPanel {
             }
         };
 
-        Action collback = new TextAction(LanguageEnum.RETURN.getMsg()) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(PropertiesUtil.eqValue("dev","spring.profiles.active")){
-                    SwingUtil.switchJpanel(panel,new LoginJPanel().getJPanel());
-                } else {
-                    SwingUtil.switchJpanel(panel,SpringContext.getBean(LoginJPanel.class).getJPanel());
-                }
-            }
-        };
-
         // 创建开始按钮
         JButton startButton = new JButton(action);
         startButton.setBounds((int)(panel.getWidth() * SINK_SCALE_W), (int)(panel.getHeight() * SINK_SCALE_Y), BUTTON_WEDTH, BUTTON_HEIGHT);
         panel.add(startButton);
         // 创建返回按钮
-        JButton collbackButton = new JButton(collback);
+        JButton collbackButton = new JButton(LoginJPanel.getReturnAction(panel));
         collbackButton.setBounds((int)(panel.getWidth() * SINK_SCALE_W) - 70, (int)(panel.getHeight() * SINK_SCALE_Y), BUTTON_WEDTH, BUTTON_HEIGHT);
         panel.add(collbackButton);
         return panel;
