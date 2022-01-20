@@ -16,6 +16,9 @@ import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
 import org.lxy.swing.dto.GeneratorReq;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 代码生成工具类
@@ -148,10 +151,28 @@ public class GeneratorUtil {
         PackageConfig packageConfig = new PackageConfig.Builder()
                 .parent(generatorReq.getPackageName())
                 .entity("model")
+                .pathInfo(Collections.singletonMap(OutputFile.mapperXml,
+                        generatorReq.getProjectPath() +
+                                generatorReq.getServerPath() +
+                                generatorReq.getMapperXmlPath()))
+                .build();
+
+        // 自定义配置 Map 对象
+        Map<String, Object> map = new HashMap<>();
+        map.put("isStartsWith",generatorReq.isStartsWith());
+        map.put("packageName",generatorReq.getPackageName());
+
+        InjectionConfig injectionConfig = new InjectionConfig.Builder()
+                .beforeOutputFile((tableInfo, objectMap) -> {
+                    // 输出文件之前消费者
+                    System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+                })
+                .customMap(map)
                 .build();
 
         new AutoGenerator(dataSourceConfig)
                 .global(config)
+                .injection(injectionConfig)
                 .template(templateConfig)
                 .strategy(strategyConfig)
                 .packageInfo(packageConfig)
